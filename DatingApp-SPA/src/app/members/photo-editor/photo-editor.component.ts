@@ -45,7 +45,7 @@ export class PhotoEditorComponent implements OnInit {
     // Part 2
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if (response) {
-        const res: Photo = JSON.parse(response); // converts the string to an object = photo
+        const res: Photo = JSON.parse(response);
         const photo = {
           id: res.id,
           url: res.url,
@@ -54,6 +54,11 @@ export class PhotoEditorComponent implements OnInit {
           isMain: res.isMain
         };
         this.photos.push(photo);
+        if (photo.isMain) {
+          this.authService.changeMemberPhoto(photo.url);
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+        }
       }
     };
   }
